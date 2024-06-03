@@ -57,22 +57,71 @@ Similar to editing the template, modify the running configuration
 
 Adjust the configuration as needed. Below is the default configuration explanation:
 
-| Configuration Item     | Default Value      | Description                                                                                                        |
-| ---------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| source_file            | "demo.txt"         | Template file name                                                                                                 |
-| final_file             | "result.txt"       | Generated file name                                                                                                |
-| favorite_list          | ["CCTV1","CCTV13"] | List of favorite channel names (used only to distinguish from regular channels, custom page retrieval quantity)    |
-| favorite_page_num      | 6                  | Page retrieval quantity for favorite channels                                                                      |
-| default_page_num       | 4                  | Page retrieval quantity for regular channels                                                                       |
-| urls_limit             | 15                 | Number of interfaces per channel                                                                                   |
-| response_time_weight   | 0.5                | Response time weight value (the sum of all weight values should be 1)                                              |
-| resolution_weight      | 0.5                | Resolution weight value (the sum of all weight values should be 1)                                                 |
-| recent_days            | 30                 | Retrieve interfaces updated within a recent time range (in days), reducing appropriately can avoid matching issues |
-| ipv_type               | "ipv4"             | The type of interface in the generated result, optional values: "ipv4", "ipv6", "all"                              |
-| domain_blacklist       | ["epg.pw"]         | Interface domain blacklist, used to filter out interfaces with low-quality, ad-inclusive domains                   |
-| url_keywords_blacklist | []                 | Interface keyword blacklist, used to filter out interfaces containing specific characters                          |
+| Configuration Item     | Default Value                                                                                                               | Description                                                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| source_file            | "demo.txt"                                                                                                                  | Template file name                                                                                                 |
+| final_file             | "result.txt"                                                                                                                | Generated file name                                                                                                |
+| favorite_list          | ["广东珠江","CCTV-1","CCTV-5","CCTV-5+","CCTV-13","广东体育","广东卫视","大湾区卫视","浙江卫视","湖南卫视","翡翠台"]        | List of favorite channel names (used only to distinguish from regular channels, custom page retrieval quantity)    |
+| open_online_search     | False                                                                                                                       | Enable online search source feature                                                                                |
+| favorite_page_num      | 5                                                                                                                           | Page retrieval quantity for favorite channels                                                                      |
+| default_page_num       | 3                                                                                                                           | Page retrieval quantity for regular channels                                                                       |
+| urls_limit             | 10                                                                                                                          | Number of interfaces per channel                                                                                   |
+| open_sort              | True                                                                                                                        | Enable the sorting function (response speed, date, resolution), or turn it off if it takes a long time to execute  |
+| response_time_weight   | 0.5                                                                                                                         | Response time weight value (the sum of all weight values should be 1)                                              |
+| resolution_weight      | 0.5                                                                                                                         | Resolution weight value (the sum of all weight values should be 1)                                                 |
+| recent_days            | 30                                                                                                                          | Retrieve interfaces updated within a recent time range (in days), reducing appropriately can avoid matching issues |
+| ipv_type               | "ipv4"                                                                                                                      | The type of interface in the generated result, optional values: "ipv4", "ipv6", "all"                              |
+| domain_blacklist       | ["epg.pw"]                                                                                                                  | Interface domain blacklist, used to filter out interfaces with low-quality, ad-inclusive domains                   |
+| url_keywords_blacklist | []                                                                                                                          | Interface keyword blacklist, used to filter out interfaces containing specific characters                          |
+| open_subscribe         | True                                                                                                                        | Enable subscription source feature                                                                                 |
+| subscribe_urls         | ["https://m3u.ibert.me/txt/fmml_dv6.txt",<br>"https://m3u.ibert.me/txt/o_cn.txt",<br>"https://m3u.ibert.me/txt/j_iptv.txt"] | Subscription source list                                                                                           |
+| open_multicast         | True                                                                                                                        | Enable multicast source function                                                                                   |
+| region_list            | ["all"]                                                                                                                     | Multicast source region list, [more regions](./fofa_map.py, "all" means all regions)                               |
 
-## Step 4: Enable Auto-update
+## Step 4: Run Updates Locally (Recommended, Stable, Supports a large number of channel updates)
+
+### 1. Install Python
+
+Please download and install Python from the official website, and choose to add Python to the system environment variable Path during installation.
+
+### 2. Run the Update
+
+Open the terminal CMD under the project directory and run the following commands in order:
+
+```python
+pip3 install pipenv
+pipenv install
+pipenv run build
+```
+
+### 3. Update the File to the Repository
+
+After the interface update is completed, upload the user_result.txt to your personal repository to complete the update.
+![Username and Repository Name](./images/rep-info.png 'Username and Repository Name')
+https://mirror.ghproxy.com/raw.githubusercontent.com/your github username/repository name (corresponding to the TV created when forking)/master/user_result.txt
+
+## Step 5: Update the Source Code
+
+Since this project will continue to iterate and improve, if you want to get the latest updates, you can do the following:
+
+### 1. Star
+
+Click on the star button at the homepage of my repository to favorite this project (Your star is the motivation for me to keep updating).
+![Star](./images/star.png 'Star')
+
+### 2. Watch
+
+Follow this project to be notified by email about the latest updates and release logs through releases.
+![Watch-activity](./images/watch-activity.png 'Watch All Activity')
+
+### 3. Sync fork
+
+Return to the homepage of your repository. If there are updates to the project, click on "Sync fork" and then "Update branch" to confirm and update to the latest code.
+![Sync-fork](./images/sync-fork.png 'Sync fork')
+
+## Please use the following content with caution. If you have a large number of channels that need to be updated, please use local updates instead of automatic updates. Improper configuration may lead to your account or workflow being banned!
+
+## Step 6: Enable Auto-update (Only suitable for a small number of channel updates)
 
 If your template and configuration modifications are correct, you can configure Actions to achieve automatic updates
 
@@ -127,29 +176,11 @@ If you can access this link and it returns the updated interface content, then y
 
 - Note: Except for the first execution of the workflow, which requires you to manually trigger it, subsequent executions (default: daily at 8:00 am Beijing time) will be automatically triggered. If you have modified the template or configuration files and want to execute the update immediately, you can manually trigger (2) Run workflow.
 
-## Step 5: Modify Workflow Update Frequency
+## Step 7: Modify Workflow Update Frequency
 
 ![.github/workflows/main.yml](./images/schedule-cron.png '.github/workflows/main.yml')
 If you want to modify the update frequency (default: daily at 8:00 am Beijing time), you can modify the on:schedule:- cron field.
 
-- #### It is strongly discouraged to make modifications, as there is no difference in the content of the interface in a short period of time. Both too frequent updates and high-consumption running workflows may be judged as resource abuse, leading to the risk of the repository and account being banned.
-- #### Please pay attention to the runtime of your workflow. If you find that the execution time is too long, you need to appropriately reduce the number of channels in the template, modify the number of pages and interfaces in the configuration, in order to meet the compliant operation requirements.
+### 1. It is strongly discouraged to make modifications, as there is no difference in the content of the interface in a short period of time. Both too frequent updates and high-consumption running workflows may be judged as resource abuse, leading to the risk of the repository and account being banned.
 
-## Step 6: Update the Source Code
-
-Since this project will continue to iterate and improve, if you want to get the latest updates, you can do the following:
-
-### 1. Star
-
-Click on the star button at the homepage of my repository to favorite this project (Your star is the motivation for me to keep updating).
-![Star](./images/star.png 'Star')
-
-### 2. Watch
-
-Follow this project to be notified by email about the latest updates and release logs through releases.
-![Watch-activity](./images/watch-activity.png 'Watch All Activity')
-
-### 3. Sync fork
-
-Return to the homepage of your repository. If there are updates to the project, click on "Sync fork" and then "Update branch" to confirm and update to the latest code.
-![Sync-fork](./images/sync-fork.png 'Sync fork')
+### 2. Please pay attention to the runtime of your workflow. If you find that the execution time is too long, you need to appropriately reduce the number of channels in the template, modify the number of pages and interfaces in the configuration, in order to meet the compliant operation requirements.
